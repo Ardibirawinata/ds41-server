@@ -19,7 +19,8 @@ COPY --from=build /src/llama.cpp/build/bin/llama-server /usr/local/bin/llama-ser
 COPY --from=build /src/llama.cpp/build/bin/*.so* /usr/local/lib/
 RUN ldconfig && useradd -m -u 1000 appuser
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh \
+    && chmod +x /usr/local/bin/entrypoint.sh
 USER appuser
 EXPOSE 8080
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
